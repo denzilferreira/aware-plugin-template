@@ -2,11 +2,10 @@ package com.aware.plugin.template;
 
 import android.util.Log;
 
+import com.aware.Aware;
+import com.aware.Aware_Preferences;
 import com.aware.utils.Aware_Plugin;
 
-/**
- * Created by denzil on 10/1/15.
- */
 public class Plugin extends Aware_Plugin {
 
     @Override
@@ -14,14 +13,15 @@ public class Plugin extends Aware_Plugin {
         super.onCreate();
 
         TAG = "Template";
+        DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
-        Log.d(TAG, "Template plugin running");
+        if( DEBUG ) Log.d(TAG, "Template plugin running");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        Log.d(TAG, "Template plugin terminated");
+        if( DEBUG ) Log.d(TAG, "Template plugin terminated");
     }
 }

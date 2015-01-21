@@ -4,7 +4,8 @@
     <application android:allowBackup="true" android:label="@string/app_name"
         android:icon="@drawable/ic_launcher">
 
-        <service android:name=".Plugin" android:exported="true"></service>
+        <service android:name="com.aware.plugin.template.Plugin" android:exported="true" />
+        <activity android:name="com.aware.plugin.template.Settings" android:exported="true" />
 
     </application>
 
