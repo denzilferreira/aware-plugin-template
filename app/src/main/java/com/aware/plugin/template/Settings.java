@@ -34,7 +34,7 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Preference setting = (Preference) findPreference(key);
+        Preference setting = findPreference(key);
 
         if( setting.getKey().equals(STATUS_PLUGIN_TEMPLATE) ) {
             boolean is_active = sharedPreferences.getBoolean(key, false);
