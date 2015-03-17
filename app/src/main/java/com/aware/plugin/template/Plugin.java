@@ -54,6 +54,7 @@ public class Plugin extends Aware_Plugin {
         super.onDestroy();
 
         if( DEBUG ) Log.d(TAG, "Template plugin terminated");
+        Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, false);
 
         //Deactivate any sensors/plugins you activated here
         //...
