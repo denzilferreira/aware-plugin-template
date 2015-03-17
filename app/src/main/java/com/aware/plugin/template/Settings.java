@@ -24,6 +24,12 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         syncSettings();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        syncSettings();
+    }
+
     private void syncSettings() {
         //Make sure to load the latest values
         CheckBoxPreference status = (CheckBoxPreference) findPreference(STATUS_PLUGIN_TEMPLATE);
@@ -37,8 +43,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         Preference setting = findPreference(key);
 
         if( setting.getKey().equals(STATUS_PLUGIN_TEMPLATE) ) {
-            boolean is_active = sharedPreferences.getBoolean(key, false);
-            Aware.setSetting(this, key, is_active);
+            boolean is_active = sharedPreferences.getBoolean(setting.getKey(), false);
+            Aware.setSetting(this, setting.getKey(), is_active);
             if( is_active ) {
                 Aware.startPlugin(this, getPackageName());
             } else {

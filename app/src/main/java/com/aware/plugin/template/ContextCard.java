@@ -20,6 +20,7 @@ public class ContextCard implements IContextCard {
     //Set how often your card needs to refresh if the stream is visible (in milliseconds)
     private int refresh_interval = 1 * 1000; //1 second = 1000 milliseconds
 
+    //DEMO: we are demo'ing a counter incrementing in real-time
     private int counter = 0;
 
     private Handler uiRefresher = new Handler(Looper.getMainLooper());
@@ -30,10 +31,11 @@ public class ContextCard implements IContextCard {
 
             //Modify card's content here once it's initialized
             if( card != null ) {
+                //DEMO display the counter value
                 counter_txt.setText(""+counter);
             }
 
-            //Ask this to run again at refresh_interval
+            //Reset timer and schedule the next card refresh
             uiRefresher.postDelayed(uiChanger, refresh_interval);
         }
     };
@@ -41,21 +43,21 @@ public class ContextCard implements IContextCard {
     //Empty constructor used to instantiate this card
     public ContextCard(){};
 
-    //Used to allow integration with Android API's
+    //You may use sContext on uiChanger to do queries to databases, etc.
     private Context sContext;
+
+    //Declare here all the UI elements you'll be accessing
+    private View card;
+    private TextView counter_txt;
 
     //Used to load your context card
     private LayoutInflater sInflater;
-
-    //Declare here all the UI elements you'll need access on the uiChanger Runnable
-    private View card;
-    private TextView counter_txt;
 
     @Override
     public View getContextCard(Context context) {
         sContext = context;
 
-        //Monitor Stream status
+        //Tell Android that you'll monitor the stream statuses
         IntentFilter filter = new IntentFilter();
         filter.addAction(Stream_UI.ACTION_AWARE_STREAM_OPEN);
         filter.addAction(Stream_UI.ACTION_AWARE_STREAM_CLOSED);
@@ -65,27 +67,31 @@ public class ContextCard implements IContextCard {
         sInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         card = sInflater.inflate(R.layout.card, null);
 
-        //Fetch UI elements from the card
+        //Initialize UI elements from the card
+        //DEMO only
         counter_txt = (TextView) card.findViewById(R.id.counter);
 
-        //Start refreshing at designed refresh rate
+        //Begin refresh cycle
         uiRefresher.postDelayed(uiChanger, refresh_interval);
 
+        //Return the card to AWARE/apps
         return card;
     }
 
-    //Receiver that keeps track of stream status. Used to stop the refresh when user leaves the stream
+    //This is a BroadcastReceiver that keeps track of stream status. Used to stop the refresh when user leaves the stream and restart again otherwise
     private StreamObs streamObs = new StreamObs();
     public class StreamObs extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if( intent.getAction().equals(Stream_UI.ACTION_AWARE_STREAM_OPEN) ) {
-                //start refreshing
-                counter = 0;
+                //start refreshing when user enters the stream
                 uiRefresher.postDelayed(uiChanger, refresh_interval);
+
+                //DEMO only, reset the counter every time the user opens the stream
+                counter = 0;
             }
             if( intent.getAction().equals(Stream_UI.ACTION_AWARE_STREAM_CLOSED) ) {
-                //stop refreshing
+                //stop refreshing when user leaves the stream
                 uiRefresher.removeCallbacks(uiChanger);
                 uiRefresher.removeCallbacksAndMessages(null);
             }
