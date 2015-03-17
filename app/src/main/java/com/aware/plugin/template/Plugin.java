@@ -15,6 +15,11 @@ public class Plugin extends Aware_Plugin {
         super.onCreate();
         if( DEBUG ) Log.d(TAG, "Template plugin running");
 
+        //Initialize our plugin's settings
+        if( Aware.getSetting(this, Settings.STATUS_PLUGIN_TEMPLATE).length() == 0 ) {
+            Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
+        }
+
         //Activate any sensors/plugins you need here
         //...
 
