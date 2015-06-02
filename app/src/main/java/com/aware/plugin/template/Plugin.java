@@ -1,6 +1,7 @@
 package com.aware.plugin.template;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.util.Log;
 
@@ -13,15 +14,17 @@ public class Plugin extends Aware_Plugin {
     @Override
     public void onCreate() {
         super.onCreate();
-        if( DEBUG ) Log.d(TAG, "Template plugin running");
+
+        TAG = "AWARE::"+getResources().getString(R.string.app_name);
+        DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
         //Initialize our plugin's settings
         if( Aware.getSetting(this, Settings.STATUS_PLUGIN_TEMPLATE).length() == 0 ) {
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
         }
 
-        //Activate any sensors/plugins you need here
-        //...
+        //Activate programmatically any sensors/plugins you need here
+        //e.g., Aware.setSetting(this, Aware_Preferences.STATUS_ACCELEROMETER,true);
 
         //Any active plugin/sensor shares its overall context using broadcasts
         CONTEXT_PRODUCER = new ContextProducer() {
@@ -36,14 +39,14 @@ public class Plugin extends Aware_Plugin {
         //TABLES_FIELDS =
         //CONTEXT_URIS = new Uri[]{ }
 
-        //Ask AWARE to apply your settings
-        sendBroadcast(new Intent(Aware.ACTION_AWARE_REFRESH));
+        //Activate plugin
+        Aware.startPlugin(this, getPackageName());
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
-        TAG = "Template";
+        TAG = "AWARE::"+getResources().getString(R.string.app_name);
         DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
         return super.onStartCommand(intent, flags, startId);
@@ -53,13 +56,12 @@ public class Plugin extends Aware_Plugin {
     public void onDestroy() {
         super.onDestroy();
 
-        if( DEBUG ) Log.d(TAG, "Template plugin terminated");
         Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, false);
 
         //Deactivate any sensors/plugins you activated here
-        //...
+        //e.g., Aware.setSetting(this, Aware_Preferences.STATUS_ACCELEROMETER, false);
 
-        //Ask AWARE to apply your settings
-        sendBroadcast(new Intent(Aware.ACTION_AWARE_REFRESH));
+        //Stop plugin
+        Aware.stopPlugin(this, getPackageName());
     }
 }

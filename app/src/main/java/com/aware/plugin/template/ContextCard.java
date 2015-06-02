@@ -41,7 +41,7 @@ public class ContextCard implements IContextCard {
     };
 
     //Empty constructor used to instantiate this card
-    public ContextCard(){};
+    public ContextCard(){}
 
     //You may use sContext on uiChanger to do queries to databases, etc.
     private Context sContext;

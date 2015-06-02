@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="plugin_template"
+    android:title="@string/app_name">
+
+    <com.aware.ui.Aware_Toolbar android:key="plugin_template" android:title="@string/app_name" />
+
     <CheckBoxPreference
         android:key="status_plugin_template"
         android:defaultValue="false"

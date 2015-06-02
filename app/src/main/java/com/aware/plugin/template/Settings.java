@@ -14,6 +14,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 
     public static final String STATUS_PLUGIN_TEMPLATE = "status_plugin_template";
 
+    private static CheckBoxPreference status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,28 +23,15 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
 
-        syncSettings();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        syncSettings();
-    }
-
-    private void syncSettings() {
-        //Make sure to load the latest values
-        CheckBoxPreference status = (CheckBoxPreference) findPreference(STATUS_PLUGIN_TEMPLATE);
+        status = (CheckBoxPreference) findPreference(STATUS_PLUGIN_TEMPLATE);
         status.setChecked(Aware.getSetting(getApplicationContext(), STATUS_PLUGIN_TEMPLATE).equals("true"));
-
-        //...
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference setting = findPreference(key);
 
-        if( setting.getKey().toString().equals(STATUS_PLUGIN_TEMPLATE) ) {
+        if( setting.getKey().equals(STATUS_PLUGIN_TEMPLATE) ) {
             boolean is_active = sharedPreferences.getBoolean(key, false);
             Aware.setSetting(this, key, is_active);
             if( is_active ) {
@@ -50,6 +39,7 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
             } else {
                 Aware.stopPlugin(getApplicationContext(), getPackageName());
             }
+            status.setChecked(is_active);
         }
     }
 }
