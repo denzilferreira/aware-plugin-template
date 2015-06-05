@@ -3,11 +3,12 @@
     android:key="plugin_template"
     android:title="@string/app_name">
 
-    <com.aware.ui.Aware_Toolbar android:key="plugin_template" android:title="@string/app_name" />
+    <com.aware.ui.Aware_Toolbar android:title="@string/app_name" />
 
     <CheckBoxPreference
         android:key="status_plugin_template"
         android:defaultValue="false"
         android:persistent="true"
-        android:summary="Activate/Deactivate template plugin" />
+        android:summary="Activate/deactivate plugin" />
+
 </PreferenceScreen>

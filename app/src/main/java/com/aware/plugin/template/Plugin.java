@@ -35,18 +35,22 @@ public class Plugin extends Aware_Plugin {
         };
 
         //To sync data to the server, you'll need to set this variables from your ContentProvider
-        //DATABASE_TABLES =
-        //TABLES_FIELDS =
-        //CONTEXT_URIS = new Uri[]{ }
+        //DATABASE_TABLES = Provider.DATABASE_TABLES
+        //TABLES_FIELDS = Provider.TABLES_FIELDS
+        //CONTEXT_URIS = new Uri[]{ Provider.Table_Data.CONTENT_URI }
 
         //Activate plugin
         Aware.startPlugin(this, getPackageName());
+
+        //Apply settings in AWARE
+        sendBroadcast(new Intent(Aware.ACTION_AWARE_REFRESH));
     }
 
+    //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
-        TAG = "AWARE::"+getResources().getString(R.string.app_name);
+
+        //Check if the user has toggled the debug messages
         DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
         return super.onStartCommand(intent, flags, startId);

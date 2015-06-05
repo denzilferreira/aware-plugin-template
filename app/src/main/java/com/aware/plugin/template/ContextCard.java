@@ -50,9 +50,6 @@ public class ContextCard implements IContextCard {
     private View card;
     private TextView counter_txt;
 
-    //Used to load your context card
-    private LayoutInflater sInflater;
-
     @Override
     public View getContextCard(Context context) {
         sContext = context;
@@ -64,7 +61,7 @@ public class ContextCard implements IContextCard {
         context.registerReceiver(streamObs, filter);
 
         //Load card information to memory
-        sInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater sInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         card = sInflater.inflate(R.layout.card, null);
 
         //Initialize UI elements from the card

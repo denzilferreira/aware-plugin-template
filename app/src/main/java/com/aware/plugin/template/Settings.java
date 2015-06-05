@@ -12,8 +12,10 @@ import com.aware.Aware;
 
 public class Settings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    //Plugin settings in XML @xml/preferences
     public static final String STATUS_PLUGIN_TEMPLATE = "status_plugin_template";
 
+    //Plugin settings UI elements
     private static CheckBoxPreference status;
 
     @Override
@@ -22,8 +24,16 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
         addPreferencesFromResource(R.xml.preferences);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         status = (CheckBoxPreference) findPreference(STATUS_PLUGIN_TEMPLATE);
+        if( Aware.getSetting(this, STATUS_PLUGIN_TEMPLATE).length() == 0 ) {
+            Aware.setSetting( this, STATUS_PLUGIN_TEMPLATE, true ); //by default, the setting is true on install
+        }
         status.setChecked(Aware.getSetting(getApplicationContext(), STATUS_PLUGIN_TEMPLATE).equals("true"));
     }
 
