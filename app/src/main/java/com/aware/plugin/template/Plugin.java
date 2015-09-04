@@ -40,7 +40,7 @@ public class Plugin extends Aware_Plugin {
         //CONTEXT_URIS = new Uri[]{ Provider.Table_Data.CONTENT_URI }
 
         //Activate plugin
-        Aware.startPlugin(this, getPackageName());
+        Aware.startPlugin(this, "com.aware.plugin.template");
 
         //Apply settings in AWARE
         sendBroadcast(new Intent(Aware.ACTION_AWARE_REFRESH));
@@ -52,6 +52,7 @@ public class Plugin extends Aware_Plugin {
 
         //Check if the user has toggled the debug messages
         DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
+
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -66,6 +67,6 @@ public class Plugin extends Aware_Plugin {
         //e.g., Aware.setSetting(this, Aware_Preferences.STATUS_ACCELEROMETER, false);
 
         //Stop plugin
-        Aware.stopPlugin(this, getPackageName());
+        Aware.stopPlugin(this, "com.aware.plugin.template");
     }
 }

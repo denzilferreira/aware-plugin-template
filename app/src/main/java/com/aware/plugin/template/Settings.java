@@ -1,6 +1,5 @@
 package com.aware.plugin.template;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -45,9 +44,9 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
             boolean is_active = sharedPreferences.getBoolean(key, false);
             Aware.setSetting(this, key, is_active);
             if( is_active ) {
-                Aware.startPlugin(getApplicationContext(), getPackageName());
+                Aware.startPlugin(getApplicationContext(), "com.aware.plugin.template");
             } else {
-                Aware.stopPlugin(getApplicationContext(), getPackageName());
+                Aware.stopPlugin(getApplicationContext(), "com.aware.plugin.template");
             }
             status.setChecked(is_active);
         }
