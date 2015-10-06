@@ -25,6 +25,7 @@ public class Plugin extends Aware_Plugin {
 
         //Activate programmatically any sensors/plugins you need here
         //e.g., Aware.setSetting(this, Aware_Preferences.STATUS_ACCELEROMETER,true);
+        //NOTE: if using plugin with dashboard, you can specify the sensors you'll use there.
 
         //Any active plugin/sensor shares its overall context using broadcasts
         CONTEXT_PRODUCER = new ContextProducer() {
@@ -52,7 +53,6 @@ public class Plugin extends Aware_Plugin {
 
         //Check if the user has toggled the debug messages
         DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
-
 
         return super.onStartCommand(intent, flags, startId);
     }
