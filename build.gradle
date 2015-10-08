@@ -2,10 +2,6 @@
 
 buildscript {
     repositories {
-        mavenCentral()
-        maven {
-            url 'https://oss.sonatype.org/content/repositories/releases/'
-        }
         jcenter()
     }
     dependencies {
@@ -18,10 +14,6 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
-        maven {
-            url 'https://oss.sonatype.org/content/repositories/releases/'
-        }
         jcenter()
     }
 }
