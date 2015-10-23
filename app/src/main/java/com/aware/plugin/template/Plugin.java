@@ -1,5 +1,6 @@
 package com.aware.plugin.template;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -35,6 +36,9 @@ public class Plugin extends Aware_Plugin {
             }
         };
 
+        //Add permissions you need (Support for Android M)
+        REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
         //To sync data to the server, you'll need to set this variables from your ContentProvider
         //DATABASE_TABLES = Provider.DATABASE_TABLES
         //TABLES_FIELDS = Provider.TABLES_FIELDS
@@ -42,14 +46,12 @@ public class Plugin extends Aware_Plugin {
 
         //Activate plugin
         Aware.startPlugin(this, "com.aware.plugin.template");
-
-        //Apply settings in AWARE
-        sendBroadcast(new Intent(Aware.ACTION_AWARE_REFRESH));
     }
 
     //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId); //request permissions if needed
 
         //Check if the user has toggled the debug messages
         DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
