@@ -27,7 +27,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.android.support:cardview-v7:23.1.0'
-    compile 'com.awareframework:aware-core:+@aar'
+    compile 'com.awareframework:aware-core:3.8.4@aar'
 }
