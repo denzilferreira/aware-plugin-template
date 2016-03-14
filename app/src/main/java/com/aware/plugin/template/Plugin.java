@@ -16,13 +16,13 @@ public class Plugin extends Aware_Plugin {
         DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
         //Initialize our plugin's settings
-        if( Aware.getSetting(this, Settings.STATUS_PLUGIN_TEMPLATE).length() == 0 ) {
-            Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
-        }
+        Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
 
         //Activate programmatically any sensors/plugins you need here
-        //e.g., Aware.setSetting(this, Aware_Preferences.STATUS_ACCELEROMETER,true);
         //NOTE: if using plugin with dashboard, you can specify the sensors you'll use there.
+        //NOTE: if you are using a sensor, don't forget to add the provider to the manifest
+//        Aware.setSetting(this, Aware_Preferences.FREQUENCY_ACCELEROMETER, 200000);
+//        Aware.startAccelerometer(this);
 
         //Any active plugin/sensor shares its overall context using broadcasts
         CONTEXT_PRODUCER = new ContextProducer() {
@@ -40,14 +40,13 @@ public class Plugin extends Aware_Plugin {
         //TABLES_FIELDS = Provider.TABLES_FIELDS
         //CONTEXT_URIS = new Uri[]{ Provider.Table_Data.CONTENT_URI }
 
-        //Activate plugin
+        //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin)
         Aware.startPlugin(this, "com.aware.plugin.template");
     }
 
     //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         //Check if the user has toggled the debug messages
         DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
@@ -61,7 +60,8 @@ public class Plugin extends Aware_Plugin {
         Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, false);
 
         //Deactivate any sensors/plugins you activated here
-        //e.g., Aware.setSetting(this, Aware_Preferences.STATUS_ACCELEROMETER, false);
+        //e.g.,
+//        Aware.stopAccelerometer(this);
 
         //Stop plugin
         Aware.stopPlugin(this, "com.aware.plugin.template");
