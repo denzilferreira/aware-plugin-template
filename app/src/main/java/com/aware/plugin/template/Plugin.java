@@ -1,6 +1,8 @@
 package com.aware.plugin.template;
 
+import android.Manifest;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
@@ -20,7 +22,6 @@ public class Plugin extends Aware_Plugin {
 
         //Activate programmatically any sensors/plugins you need here
         //NOTE: if using plugin with dashboard, you can specify the sensors you'll use there.
-        //NOTE: if you are using a sensor, don't forget to add the provider to the manifest
 //        Aware.setSetting(this, Aware_Preferences.FREQUENCY_ACCELEROMETER, 200000);
 //        Aware.startAccelerometer(this);
 
@@ -33,14 +34,14 @@ public class Plugin extends Aware_Plugin {
         };
 
         //Add permissions you need (Support for Android M) e.g.,
-        //REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         //To sync data to the server, you'll need to set this variables from your ContentProvider
-        //DATABASE_TABLES = Provider.DATABASE_TABLES
-        //TABLES_FIELDS = Provider.TABLES_FIELDS
-        //CONTEXT_URIS = new Uri[]{ Provider.Table_Data.CONTENT_URI }
+        DATABASE_TABLES = Provider.DATABASE_TABLES;
+        TABLES_FIELDS = Provider.TABLES_FIELDS;
+        CONTEXT_URIS = new Uri[]{ Provider.TableOne_Data.CONTENT_URI }; //this syncs dummy TableOne_Data to server
 
-        //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin)
+        //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin and apply the settings)
         Aware.startPlugin(this, "com.aware.plugin.template");
     }
 

@@ -1,21 +1,69 @@
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.jfrog.bintray'
+
+version = version_readable
+group = "com.awareframework"
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.aware.plugin.template"
+        applicationId "com.aware.plugin.template" //MODIFY ME to match your plugin package name!
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode version_code //this is handled by Jenkins: do not change
+        versionName version_readable //this is handled by Jenkins: do not change
     }
+
+    signingConfigs {
+        release {
+            storeFile file(project.hasProperty("KEYSTORE_FILE") ? KEYSTORE_FILE : "/")
+            storePassword project.hasProperty("KEYSTORE_PASSWORD") ? KEYSTORE_PASSWORD : ""
+            keyAlias project.hasProperty("KEY") ? KEY : ""
+            keyPassword project.hasProperty("KEY_PASSWORD") ? KEY_PASSWORD : ""
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+bintray {
+    user = project.hasProperty("bintrayUsername") ? bintrayUsername : ""
+    key = project.hasProperty("bintrayKey") ? bintrayKey : ""
+
+    configurations = ['archives']
+
+    publish = true
+
+    pkg {
+        repo = 'com.awareframework'
+        name = android.defaultConfig.applicationId
+        licenses = ['Apache-2.0']
+        websiteUrl = 'http://www.awareframework.com'
+        issueTrackerUrl = '' //MODIFY ME add your GitHub issues link
+        labels = ['aar','android','framework','aware']
+        publicDownloadNumbers = true
+        vcsUrl = '' //MODIFY ME add GitHub link to project (e.g., https://github.com/denzilferreira/aware-client.git)
+        desc = "AWARE Plugin: Template" //MODIFY ME name of your plugin
+        userOrg = user
+        version {
+            name = "$version_readable"
+            desc = bintray.pkg.desc
+            released = new Date()
+            vcsTag = "$version_readable"
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
         }
     }
 }
@@ -26,8 +74,8 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile "com.awareframework:aware-core:${aware_libs}@aar" //define aware_libs in /build.gradle
-    compile 'com.koushikdutta.ion:ion:2.1.6'
+    compile "com.android.support:appcompat-v7:$support_libs"
+    compile "com.awareframework:aware-core:$aware_libs@aar"
+    compile "com.koushikdutta.ion:ion:2.1.6"
     compile "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2"
 }
