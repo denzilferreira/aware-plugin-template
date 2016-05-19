@@ -15,6 +15,7 @@ public class ContextCard implements IContextCard {
 
     //DEMO: we are demo'ing a counter incrementing in real-time
     int counter = 0;
+
     final Handler uiUpdater = new Handler();
     TextView counter_txt;
 

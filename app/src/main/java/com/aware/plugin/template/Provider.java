@@ -28,7 +28,7 @@ public class Provider extends ContentProvider {
     public static final int DATABASE_VERSION = 1; //increase this if you make changes to the database structure, i.e., rename columns, etc.
 
     public static Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
-    public static final String DATABASE_NAME = "template.db"; //the database filename, use plugin_xxx for plugins.
+    public static final String DATABASE_NAME = "plugin_template.db"; //the database filename, use plugin_xxx for plugins.
 
     //Add here your database table names, as many as you need
     public static final String DB_TBL_TEMPLATE = "table_one";
@@ -55,8 +55,8 @@ public class Provider extends ContentProvider {
      */
     public static final class TableOne_Data implements AWAREColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(Provider.CONTENT_URI, DB_TBL_TEMPLATE);
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.package_name.table_name"; //modify me
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.package_name.table_name"; //modify me
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.template.provider.table_name"; //modify me
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.template.provider.table_name"; //modify me
 
         //Note: integers and strings don't need a type prefix_
         public static final String NAME = "name";
@@ -72,7 +72,7 @@ public class Provider extends ContentProvider {
         TableOne_Data.NAME + " text default ''," +
         TableOne_Data.BIG_NUMBER + " real default 0," +
         TableOne_Data.PICTURE + " blob default null," +
-        "UNIQUE (" + TableOne_Data.TIMESTAMP + "," + TableOne_Data.DEVICE_ID + ")"; //this makes sure the data is unique on both phone and server side
+        "UNIQUE (" + TableOne_Data.DEVICE_ID + "," + TableOne_Data.TIMESTAMP + ")"; //this makes sure the data is unique on both phone and server side
 
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
@@ -144,9 +144,6 @@ public class Provider extends ContentProvider {
                 qb.setProjectionMap(tableOneHash); //the hashmap of the table
                 break;
 
-
-
-
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -174,9 +171,6 @@ public class Provider extends ContentProvider {
                 return TableOne_Data.CONTENT_TYPE;
             case TABLE_ONE_ITEM:
                 return TableOne_Data.CONTENT_ITEM_TYPE;
-
-
-
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -206,7 +200,6 @@ public class Provider extends ContentProvider {
                 }
                 throw new SQLException("Failed to insert row into " + uri);
 
-
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -226,8 +219,6 @@ public class Provider extends ContentProvider {
             case TABLE_ONE_DIR:
                 count = database.delete(DATABASE_TABLES[0], selection, selectionArgs);
                 break;
-
-
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -250,9 +241,6 @@ public class Provider extends ContentProvider {
             case TABLE_ONE_DIR:
                 count = database.update(DATABASE_TABLES[0], values, selection, selectionArgs);
                 break;
-
-
-
 
             default:
                 database.close();

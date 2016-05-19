@@ -18,15 +18,6 @@ public class Plugin extends Aware_Plugin {
         super.onCreate();
 
         TAG = "AWARE::"+getResources().getString(R.string.app_name);
-        DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
-
-        //Initialize our plugin's settings
-        Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
-
-        //Activate programmatically any sensors/plugins you need here
-        //NOTE: if using plugin with dashboard, you can specify the sensors you'll use there.
-//        Aware.setSetting(this, Aware_Preferences.FREQUENCY_ACCELEROMETER, 200000);
-//        Aware.startAccelerometer(this);
 
         //Any active plugin/sensor shares its overall context using broadcasts
         CONTEXT_PRODUCER = new ContextProducer() {
@@ -60,6 +51,13 @@ public class Plugin extends Aware_Plugin {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             //Check if the user has toggled the debug messages
             DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
+
+            //Initialize our plugin's settings
+            Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
+
+            //Activate programmatically any sensors/plugins you need here
+            //Aware.setSetting(this, Aware_Preferences.FREQUENCY_ACCELEROMETER, 200000);
+            //Aware.startAccelerometer(this);
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -72,7 +70,7 @@ public class Plugin extends Aware_Plugin {
 
         //Deactivate any sensors/plugins you activated here
         //e.g.,
-//        Aware.stopAccelerometer(this);
+        //Aware.stopAccelerometer(this);
 
         //Stop plugin
         Aware.stopPlugin(this, "com.aware.plugin.template");
