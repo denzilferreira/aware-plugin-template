@@ -28,7 +28,7 @@ public class Plugin extends Aware_Plugin {
         };
 
         //Add permissions you need (Support for Android M). By default, AWARE asks access to the #Manifest.permission.WRITE_EXTERNAL_STORAGE
-//        REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        //REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         //To sync data to the server, you'll need to set this variables from your ContentProvider
         DATABASE_TABLES = Provider.DATABASE_TABLES;
@@ -58,9 +58,6 @@ public class Plugin extends Aware_Plugin {
             //Initialize our plugin's settings
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
 
-            //Activate programmatically any sensors/plugins you need here
-            //Aware.setSetting(this, Aware_Preferences.FREQUENCY_ACCELEROMETER, 200000);
-            //Aware.startAccelerometer(this);
         } else {
             Intent permissions = new Intent(this, PermissionsHandler.class);
             permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
@@ -77,11 +74,10 @@ public class Plugin extends Aware_Plugin {
 
         Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, false);
 
-        //Deactivate any sensors/plugins you activated here
-        //e.g.,
-        //Aware.stopAccelerometer(this);
-
         //Stop plugin
         Aware.stopPlugin(this, "com.aware.plugin.template");
+
+        //Stop AWARE
+        Aware.stopAWARE();
     }
 }
