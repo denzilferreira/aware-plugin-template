@@ -71,8 +71,7 @@ public class Provider extends ContentProvider {
         TableOne_Data.DEVICE_ID + " text default ''," +
         TableOne_Data.NAME + " text default ''," +
         TableOne_Data.BIG_NUMBER + " real default 0," +
-        TableOne_Data.PICTURE + " blob default null," +
-        "UNIQUE (" + TableOne_Data.DEVICE_ID + "," + TableOne_Data.TIMESTAMP + ")"; //this makes sure the data is unique on both phone and server side
+        TableOne_Data.PICTURE + " blob default null";
 
     /**
      * Share the fields with AWARE so we can replicate the table schema on the server
@@ -122,7 +121,6 @@ public class Provider extends ContentProvider {
         tableOneHash.put(TableOne_Data.NAME, TableOne_Data.NAME);
         tableOneHash.put(TableOne_Data.BIG_NUMBER, TableOne_Data.BIG_NUMBER);
         tableOneHash.put(TableOne_Data.PICTURE, TableOne_Data.PICTURE);
-
 
         return true;
     }

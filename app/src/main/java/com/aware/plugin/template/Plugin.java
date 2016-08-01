@@ -27,13 +27,8 @@ public class Plugin extends Aware_Plugin {
             }
         };
 
-        //Add permissions you need (Support for Android M) e.g.,
-        REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        Intent permissions = new Intent(this, PermissionsHandler.class);
-        permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
-        permissions.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(permissions);
+        //Add permissions you need (Support for Android M). By default, AWARE asks access to the #Manifest.permission.WRITE_EXTERNAL_STORAGE
+//        REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         //To sync data to the server, you'll need to set this variables from your ContentProvider
         DATABASE_TABLES = Provider.DATABASE_TABLES;
@@ -47,8 +42,16 @@ public class Plugin extends Aware_Plugin {
     //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //Check if we still have the permissions/are we good to go?
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+        boolean permissions_ok = true;
+        for (String p : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
+                permissions_ok = false;
+                break;
+            }
+        }
+
+        if (permissions_ok) {
             //Check if the user has toggled the debug messages
             DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
@@ -58,7 +61,13 @@ public class Plugin extends Aware_Plugin {
             //Activate programmatically any sensors/plugins you need here
             //Aware.setSetting(this, Aware_Preferences.FREQUENCY_ACCELEROMETER, 200000);
             //Aware.startAccelerometer(this);
+        } else {
+            Intent permissions = new Intent(this, PermissionsHandler.class);
+            permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
+            permissions.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(permissions);
         }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
