@@ -1,6 +1,5 @@
 package com.aware.plugin.template;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -73,9 +72,6 @@ public class Plugin extends Aware_Plugin {
         super.onDestroy();
 
         Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, false);
-
-        //Stop plugin
-        Aware.stopPlugin(this, "com.aware.plugin.template");
 
         //Stop AWARE
         Aware.stopAWARE();
