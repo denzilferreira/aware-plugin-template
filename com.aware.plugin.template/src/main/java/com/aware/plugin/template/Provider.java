@@ -19,15 +19,11 @@ import com.aware.utils.DatabaseHelper;
 
 import java.util.HashMap;
 
-/**
- * Created by denzil on 07/04/16.
- */
 public class Provider extends ContentProvider {
 
     public static String AUTHORITY = "com.aware.plugin.template.provider.xxx"; //change to package.provider.your_plugin_name
     public static final int DATABASE_VERSION = 1; //increase this if you make changes to the database structure, i.e., rename columns, etc.
 
-    public static Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String DATABASE_NAME = "plugin_template.db"; //the database filename, use plugin_xxx for plugins.
 
     //Add here your database table names, as many as you need
@@ -54,7 +50,7 @@ public class Provider extends ContentProvider {
      * In this example, we are adding example columns
      */
     public static final class TableOne_Data implements AWAREColumns {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(Provider.CONTENT_URI, DB_TBL_TEMPLATE);
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + DB_TBL_TEMPLATE);
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.aware.plugin.template.provider.table_one"; //modify me
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.aware.plugin.template.provider.table_one"; //modify me
 
@@ -213,7 +209,7 @@ public class Provider extends ContentProvider {
         int count;
         switch (sUriMatcher.match(uri)) {
 
-            //Add each table DIR case
+            //Add each table DIR case, increasing the index accordingly
             case TABLE_ONE_DIR:
                 count = database.delete(DATABASE_TABLES[0], selection, selectionArgs);
                 break;

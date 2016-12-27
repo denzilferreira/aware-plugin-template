@@ -1,17 +1,16 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 
 version = version_readable
 group = "com.awareframework"
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "com.aware.plugin.template" //EDIT ME
         minSdkVersion 10
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode version_code
         versionName version_readable
     }
@@ -49,7 +48,7 @@ bintray {
 
     pkg {
         repo = 'com.awareframework'
-        name = android.defaultConfig.applicationId
+        name = 'com.aware.plugin.template' //EDIT ME
         licenses = ['Apache-2.0']
         websiteUrl = 'https://github.com/denzilferreira/aware-plugin-template' //EDIT ME
         issueTrackerUrl = 'https://github.com/denzilferreira/aware-plugin-template/issues' //EDIT ME
@@ -69,10 +68,43 @@ bintray {
     }
 }
 
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+task generateJavadocs(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task generateJavadocsJar(type: Jar) {
+    from generateJavadocs.destinationDir
+    classifier 'javadoc'
+}
+
+generateJavadocsJar.dependsOn generateJavadocs
+
+artifacts {
+    archives generateJavadocsJar
+    archives generateSourcesJar
+}
+
+repositories {
+    maven { url 'https://jitpack.io' } //this allows JIT library generation directly from GitHub source-code
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:${support_libs}"
-    compile "com.awareframework:aware-core:${aware_libs}@aar"
-    compile "com.koushikdutta.ion:ion:2.1.6"
-    compile "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2"
+    compile 'com.github.denzilferreira:aware-client:development-SNAPSHOT' //compile plugin against the development branch
+//    compile 'com.github.denzilferreira:aware-client:master' //compile plugin against the stable branch
+
+//    compile "com.koushikdutta.ion:ion:2.1.6"
+//    compile "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2"
 }

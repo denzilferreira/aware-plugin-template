@@ -8,12 +8,14 @@
 
         <service
             android:name="com.aware.plugin.template.Plugin"
-            android:exported="true" />
+            android:exported="true"
+            android:label="AWARE: Plugin Template"/> <!-- Use a hardcoded string to keep the name of the original plugin if added as a library to another -->
 
         <activity
             android:name="com.aware.plugin.template.Settings"
             android:exported="true" />
 
+        <!-- Keep the ${applicationId} so there are no conflicts when merging this plugin as a library for reuse -->
         <provider
             android:name="com.aware.plugin.template.Provider"
             android:authorities="${applicationId}.provider.xxx"
