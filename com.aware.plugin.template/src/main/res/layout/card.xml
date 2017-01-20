@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Counter: "
-        android:id="@+id/counter"
+        android:text="Hello Android!"
+        android:id="@+id/hello"
         android:textColor="#000"/>
 </LinearLayout>

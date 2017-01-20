@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+version = version_readable
+group = "com.awareframework"
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "com.aware.plugin.template" //EDIT ME
+        minSdkVersion 10
+        targetSdkVersion 25
+        versionCode version_code
+        versionName version_readable
+    }
+
+    signingConfigs {
+        release {
+            //set values in ~/.gradle/gradle.properties to sign with your own keystore and certificate
+            storeFile file(project.hasProperty("KEYSTORE_FILE") ? KEYSTORE_FILE : "/")
+            storePassword project.hasProperty("KEYSTORE_PASSWORD") ? KEYSTORE_PASSWORD : ""
+            keyAlias project.hasProperty("KEY") ? KEY : ""
+            keyPassword project.hasProperty("KEY_PASSWORD") ? KEY_PASSWORD : ""
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+repositories {
+    maven { url 'https://jitpack.io' } //this allows library generation directly from GitHub source-code
+}
+
+/**
+ * This makes it so that when compiling your package, Gradle always fetches the latest source from GitHub
+ */
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.support:appcompat-v7:${support_libs}"
+    compile "com.github.denzilferreira:aware-client:master-SNAPSHOT" //compile plugin against the stable branch
+//    compile 'com.github.denzilferreira:aware-client:development-SNAPSHOT' //compile plugin against the development branch
+}

@@ -6,14 +6,18 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name">
 
+        <!-- Use a hardcoded label string on the service
+        to keep the name of the original plugin if added as a library to another -->
         <service
             android:name="com.aware.plugin.template.Plugin"
-            android:exported="true" />
+            android:exported="true"
+            android:label="AWARE: Plugin Template"/>
 
         <activity
             android:name="com.aware.plugin.template.Settings"
             android:exported="true" />
 
+        <!-- Keep the ${applicationId} so there are no conflicts when merging this plugin as a library for reuse -->
         <provider
             android:name="com.aware.plugin.template.Provider"
             android:authorities="${applicationId}.provider.xxx"
