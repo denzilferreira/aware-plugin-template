@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
 
 version = version_readable
 group = "com.awareframework"
@@ -38,36 +37,9 @@ android {
     }
 }
 
-bintray {
-    user = project.hasProperty("bintrayUsername") ? bintrayUsername : ""
-    key = project.hasProperty("bintrayKey") ? bintrayKey : ""
-
-    configurations = ['archives']
-
-    publish = true
-
-    pkg {
-        repo = 'com.awareframework'
-        name = 'com.aware.plugin.template' //EDIT ME
-        licenses = ['Apache-2.0']
-        websiteUrl = 'https://github.com/denzilferreira/aware-plugin-template' //EDIT ME
-        issueTrackerUrl = 'https://github.com/denzilferreira/aware-plugin-template/issues' //EDIT ME
-        labels = ['aar','android','framework','aware']
-        publicDownloadNumbers = true
-        vcsUrl = 'https://github.com/denzilferreira/aware-plugin-template.git' //EDIT ME
-        desc = "AWARE Plugin: Template" //EDIT ME
-        userOrg = user
-        githubRepo = "denzilferreira/aware-plugin-template" //EDIT ME
-
-        version {
-            name = "$version_readable"
-            desc = bintray.pkg.desc
-            released = new Date()
-            vcsTag = "$version_readable"
-        }
-    }
-}
-
+/**
+ * These tasks generate a jar, javadoc for the package automatically
+ */
 task generateSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier 'sources'
@@ -90,11 +62,17 @@ artifacts {
     archives generateJavadocsJar
     archives generateSourcesJar
 }
+/**
+ * ---------
+ */
 
 repositories {
-    maven { url 'https://jitpack.io' } //this allows JIT library generation directly from GitHub source-code
+    maven { url 'https://jitpack.io' } //this allows library generation directly from GitHub source-code
 }
 
+/**
+ * This makes it so that when compiling your package, Gradle always fetches the latest source from GitHub
+ */
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
@@ -102,9 +80,6 @@ configurations.all {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:${support_libs}"
-    compile 'com.github.denzilferreira:aware-client:development-SNAPSHOT' //compile plugin against the development branch
-//    compile 'com.github.denzilferreira:aware-client:master' //compile plugin against the stable branch
-
-//    compile "com.koushikdutta.ion:ion:2.1.6"
-//    compile "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2"
+    compile 'com.github.denzilferreira:aware-client:master' //compile plugin against the stable branch
+//    compile 'com.github.denzilferreira:aware-client:development-SNAPSHOT' //compile plugin against the development branch
 }

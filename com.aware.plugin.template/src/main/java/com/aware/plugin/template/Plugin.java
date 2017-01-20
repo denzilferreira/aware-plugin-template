@@ -20,7 +20,8 @@ public class Plugin extends Aware_Plugin {
 
         /**
          * Plugins share their current status, i.e., context using this method.
-         * This method is called automatically when triggering {@link Aware#ACTION_AWARE_CURRENT_CONTEXT}
+         * This method is called automatically when triggering
+         * {@link Aware#ACTION_AWARE_CURRENT_CONTEXT}
          **/
         CONTEXT_PRODUCER = new ContextProducer() {
             @Override
@@ -29,7 +30,9 @@ public class Plugin extends Aware_Plugin {
             }
         };
 
-        //Add permissions you need (Support for Android M). By default, AWARE asks access to the #Manifest.permission.WRITE_EXTERNAL_STORAGE
+        //Add permissions you need (Android M+).
+        //By default, AWARE asks access to the #Manifest.permission.WRITE_EXTERNAL_STORAGE
+
         //REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
         //To sync data to the server, you'll need to set this variables from your ContentProvider

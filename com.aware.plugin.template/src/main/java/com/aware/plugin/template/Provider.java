@@ -78,9 +78,7 @@ public class Provider extends ContentProvider {
 
     //Helper variables for ContentProvider - don't change me
     private static UriMatcher sUriMatcher;
-    private static DatabaseHelper databaseHelper;
     private static SQLiteDatabase database;
-
     //For each table, create a hashmap needed for database queries
     private static HashMap<String, String> tableOneHash;
 
@@ -89,9 +87,9 @@ public class Provider extends ContentProvider {
      * @return
      */
     private boolean initializeDB() {
-        if (databaseHelper == null) {
-            databaseHelper = new DatabaseHelper(getContext(), DATABASE_NAME, null, DATABASE_VERSION, DATABASE_TABLES, TABLES_FIELDS);
-        }
+        DatabaseHelper databaseHelper = new DatabaseHelper(getContext(),
+                DATABASE_NAME, null, DATABASE_VERSION, DATABASE_TABLES, TABLES_FIELDS);
+
         if (database == null || !database.isOpen()) {
             database = databaseHelper.getWritableDatabase();
         }
