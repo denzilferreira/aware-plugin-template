@@ -80,6 +80,6 @@ public class Plugin extends Aware_Plugin {
         Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, false);
 
         //Stop AWARE's instance running inside the plugin package
-        Aware.stopAWARE();
+        Aware.stopAWARE(this);
     }
 }
