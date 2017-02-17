@@ -22,8 +22,8 @@ import java.util.HashMap;
 public class Provider extends ContentProvider {
 
     public static String AUTHORITY = "com.aware.plugin.template.provider.xxx"; //change to package.provider.your_plugin_name
-    public static final int DATABASE_VERSION = 1; //increase this if you make changes to the database structure, i.e., rename columns, etc.
 
+    public static final int DATABASE_VERSION = 1; //increase this if you make changes to the database structure, i.e., rename columns, etc.
     public static final String DATABASE_NAME = "plugin_template.db"; //the database filename, use plugin_xxx for plugins.
 
     //Add here your database table names, as many as you need
@@ -76,25 +76,20 @@ public class Provider extends ContentProvider {
             DB_TBL_TEMPLATE_FIELDS
     };
 
-    //Helper variables for ContentProvider - don't change me
-    private static UriMatcher sUriMatcher;
+    //Helper variables for ContentProvider - DO NOT CHANGE
+    private UriMatcher sUriMatcher;
+    private static DatabaseHelper dbHelper;
     private static SQLiteDatabase database;
-    //For each table, create a hashmap needed for database queries
-    private static HashMap<String, String> tableOneHash;
-
-    /**
-     * Initialise database: create the database file, update if needed, etc. DO NOT CHANGE ME
-     * @return
-     */
-    private boolean initializeDB() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(getContext(),
-                DATABASE_NAME, null, DATABASE_VERSION, DATABASE_TABLES, TABLES_FIELDS);
-
-        if (database == null || !database.isOpen()) {
-            database = databaseHelper.getWritableDatabase();
-        }
-        return (database != null && databaseHelper != null);
+    private void initialiseDatabase() {
+        if (dbHelper == null)
+            dbHelper = new DatabaseHelper(getContext(), DATABASE_NAME, null, DATABASE_VERSION, DATABASE_TABLES, TABLES_FIELDS);
+        if (database == null)
+            database = dbHelper.getWritableDatabase();
     }
+    //--
+
+    //For each table, create a hashmap needed for database queries
+    private HashMap<String, String> tableOneHash;
 
     @Override
     public boolean onCreate() {
@@ -116,16 +111,72 @@ public class Provider extends ContentProvider {
         tableOneHash.put(TableOne_Data.BIG_NUMBER, TableOne_Data.BIG_NUMBER);
         tableOneHash.put(TableOne_Data.PICTURE, TableOne_Data.PICTURE);
 
+        initialiseDatabase();
+
         return true;
+    }
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        initialiseDatabase();
+
+        database.beginTransaction();
+
+        int count;
+        switch (sUriMatcher.match(uri)) {
+
+            //Add each table DIR case, increasing the index accordingly
+            case TABLE_ONE_DIR:
+                count = database.delete(DATABASE_TABLES[0], selection, selectionArgs);
+                break;
+
+            default:
+                database.endTransaction();
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        database.setTransactionSuccessful();
+        database.endTransaction();
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
+    }
+
+    @Nullable
+    @Override
+    public Uri insert(Uri uri, ContentValues initialValues) {
+
+        initialiseDatabase();
+
+        ContentValues values = (initialValues != null) ? new ContentValues(initialValues) : new ContentValues();
+
+        database.beginTransaction();
+
+        switch (sUriMatcher.match(uri)) {
+
+            //Add each table DIR case
+            case TABLE_ONE_DIR:
+                long _id = database.insert(DATABASE_TABLES[0], TableOne_Data.DEVICE_ID, values);
+                database.setTransactionSuccessful();
+                database.endTransaction();
+                if (_id > 0) {
+                    Uri dataUri = ContentUris.withAppendedId(TableOne_Data.CONTENT_URI, _id);
+                    getContext().getContentResolver().notifyChange(dataUri, null);
+                    return dataUri;
+                }
+                database.endTransaction();
+                throw new SQLException("Failed to insert row into " + uri);
+            default:
+                database.endTransaction();
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
     }
 
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if (!initializeDB()) {
-            Log.w("", "Database unavailable...");
-            return null;
-        }
+
+        initialiseDatabase();
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         switch (sUriMatcher.match(uri)) {
@@ -169,62 +220,12 @@ public class Provider extends ContentProvider {
         }
     }
 
-    @Nullable
-    @Override
-    public Uri insert(Uri uri, ContentValues new_values) {
-        if (!initializeDB()) {
-            Log.w("", "Database unavailable...");
-            return null;
-        }
-
-        ContentValues values = (new_values != null) ? new ContentValues(new_values) : new ContentValues();
-        long _id;
-
-        switch (sUriMatcher.match(uri)) {
-
-            //Add each table DIR case
-            case TABLE_ONE_DIR:
-                _id = database.insert(DATABASE_TABLES[0], TableOne_Data.DEVICE_ID, values);
-                if (_id > 0) {
-                    Uri dataUri = ContentUris.withAppendedId(TableOne_Data.CONTENT_URI, _id);
-                    getContext().getContentResolver().notifyChange(dataUri, null);
-                    return dataUri;
-                }
-                throw new SQLException("Failed to insert row into " + uri);
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-    }
-
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        if (!initializeDB()) {
-            Log.w("", "Database unavailable...");
-            return 0;
-        }
-
-        int count;
-        switch (sUriMatcher.match(uri)) {
-
-            //Add each table DIR case, increasing the index accordingly
-            case TABLE_ONE_DIR:
-                count = database.delete(DATABASE_TABLES[0], selection, selectionArgs);
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return count;
-    }
-
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        if (!initializeDB()) {
-            Log.w("", "Database unavailable...");
-            return 0;
-        }
+
+        initialiseDatabase();
+
+        database.beginTransaction();
 
         int count;
         switch (sUriMatcher.match(uri)) {
@@ -235,10 +236,14 @@ public class Provider extends ContentProvider {
                 break;
 
             default:
-                database.close();
+                database.endTransaction();
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        database.setTransactionSuccessful();
+        database.endTransaction();
+
         getContext().getContentResolver().notifyChange(uri, null);
+
         return count;
     }
 }
