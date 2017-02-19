@@ -78,7 +78,7 @@ public class Provider extends ContentProvider {
 
     //Helper variables for ContentProvider - DO NOT CHANGE
     private UriMatcher sUriMatcher;
-    private static DatabaseHelper dbHelper;
+    private DatabaseHelper dbHelper;
     private static SQLiteDatabase database;
     private void initialiseDatabase() {
         if (dbHelper == null)
@@ -110,8 +110,6 @@ public class Provider extends ContentProvider {
         tableOneHash.put(TableOne_Data.NAME, TableOne_Data.NAME);
         tableOneHash.put(TableOne_Data.BIG_NUMBER, TableOne_Data.BIG_NUMBER);
         tableOneHash.put(TableOne_Data.PICTURE, TableOne_Data.PICTURE);
-
-        initialiseDatabase();
 
         return true;
     }
