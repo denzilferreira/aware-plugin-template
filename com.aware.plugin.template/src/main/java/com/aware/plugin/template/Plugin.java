@@ -60,6 +60,9 @@ public class Plugin extends Aware_Plugin {
             //Initialize our plugin's settings
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
 
+            //Boot AWARE
+            Aware.startAWARE(this);
+
         } else {
             Intent permissions = new Intent(this, PermissionsHandler.class);
             permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
