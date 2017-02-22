@@ -39,9 +39,6 @@ public class Plugin extends Aware_Plugin {
         DATABASE_TABLES = Provider.DATABASE_TABLES;
         TABLES_FIELDS = Provider.TABLES_FIELDS;
         CONTEXT_URIS = new Uri[]{ Provider.TableOne_Data.CONTENT_URI }; //this syncs dummy TableOne_Data to server
-
-        //Activate plugin -- do this ALWAYS as the last thing (this will restart your own plugin and apply the settings)
-        Aware.startPlugin(this, "com.aware.plugin.template");
     }
 
     //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
@@ -62,6 +59,9 @@ public class Plugin extends Aware_Plugin {
 
             //Initialize our plugin's settings
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
+
+            //Boot AWARE
+            Aware.startAWARE(this);
 
         } else {
             Intent permissions = new Intent(this, PermissionsHandler.class);
