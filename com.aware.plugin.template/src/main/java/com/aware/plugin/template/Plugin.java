@@ -9,6 +9,7 @@ import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.ui.PermissionsHandler;
 import com.aware.utils.Aware_Plugin;
+import com.aware.utils.PluginsManager;
 
 public class Plugin extends Aware_Plugin {
 
@@ -39,38 +40,25 @@ public class Plugin extends Aware_Plugin {
         DATABASE_TABLES = Provider.DATABASE_TABLES;
         TABLES_FIELDS = Provider.TABLES_FIELDS;
         CONTEXT_URIS = new Uri[]{ Provider.TableOne_Data.CONTENT_URI }; //this syncs dummy TableOne_Data to server
+
+        //Boot AWARE
+        Aware.startAWARE(this);
     }
 
     //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
 
-        boolean permissions_ok = true;
-        for (String p : REQUIRED_PERMISSIONS) {
-            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
-                permissions_ok = false;
-                break;
-            }
-        }
+        if (PERMISSIONS_OK) {
 
-        if (permissions_ok) {
-            //Check if the user has toggled the debug messages
             DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
             //Initialize our plugin's settings
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
-
-            //Boot AWARE
-            Aware.startAWARE(this);
-
-        } else {
-            Intent permissions = new Intent(this, PermissionsHandler.class);
-            permissions.putExtra(PermissionsHandler.EXTRA_REQUIRED_PERMISSIONS, REQUIRED_PERMISSIONS);
-            permissions.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(permissions);
         }
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
