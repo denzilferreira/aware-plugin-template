@@ -49,14 +49,13 @@ public class Plugin extends Aware_Plugin {
 
         if (PERMISSIONS_OK) {
 
-            PluginsManager.enablePlugin(this, "com.aware.plugin.template"); //modify to match your plugin package name
-
             DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
             //Initialize our plugin's settings
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
 
             //Initialise AWARE instance in plugin
+            Aware.startPlugin(this, "com.aware.plugin.template");
             Aware.startAWARE(this);
         }
 
