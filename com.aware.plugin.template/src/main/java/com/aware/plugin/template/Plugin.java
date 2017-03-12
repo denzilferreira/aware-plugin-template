@@ -13,8 +13,6 @@ import com.aware.utils.PluginsManager;
 
 public class Plugin extends Aware_Plugin {
 
-    private Intent aware;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,10 +40,6 @@ public class Plugin extends Aware_Plugin {
         DATABASE_TABLES = Provider.DATABASE_TABLES;
         TABLES_FIELDS = Provider.TABLES_FIELDS;
         CONTEXT_URIS = new Uri[]{ Provider.TableOne_Data.CONTENT_URI }; //this syncs dummy TableOne_Data to server
-
-        //Initialise AWARE's service
-        aware = new Intent(this, Aware.class);
-        startService(aware);
     }
 
     //This function gets called every 5 minutes by AWARE to make sure this plugin is still running.
@@ -59,6 +53,10 @@ public class Plugin extends Aware_Plugin {
 
             //Initialize our plugin's settings
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
+
+            //Initialise AWARE instance in plugin
+            Aware.startPlugin(this, "com.aware.plugin.template");
+            Aware.startAWARE(this);
         }
 
         return START_STICKY;
@@ -70,7 +68,7 @@ public class Plugin extends Aware_Plugin {
 
         Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, false);
 
-        //Stop AWARE's service
-        stopService(aware);
+        //Stop AWARE instance in plugin
+        Aware.stopAWARE(this);
     }
 }
