@@ -55,7 +55,6 @@ public class Plugin extends Aware_Plugin {
             Aware.setSetting(this, Settings.STATUS_PLUGIN_TEMPLATE, true);
 
             //Initialise AWARE instance in plugin
-            Aware.startPlugin(this, "com.aware.plugin.template");
             Aware.startAWARE(this);
         }
 
