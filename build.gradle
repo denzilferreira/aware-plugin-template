@@ -1,25 +1,39 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 project.ext {
     mqtt_libs = (System.getenv("mqtt_libs") as String ?: "1.1.0")
-    ion_libs = (System.getenv("ion_libs") as String ?: "2.1.6")
-    support_libs = (System.getenv("support_libs") as String ?: "25.2.0")
-    google_libs = (System.getenv("google_libs") ?: "10.0.1")
+    ion_libs = (System.getenv("ion_libs") as String ?: "2.+")
+    support_libs = (System.getenv("support_libs") as String ?: "26.0.2")
+    google_libs = (System.getenv("google_libs") ?: "11.2.0")
     version_code = (System.getenv("aware_revision") as Integer ?: 700)
     version_readable = "4.0." + version_code + "." + (System.getenv("aware_label") as String ?: "selfie")
-    aware_libs = (System.getenv("aware_libs") as String ?: "master-SNAPSHOT")
+    compile_sdk = (System.getenv("compile_sdk") as Integer ?: 26)
+    target_sdk = (System.getenv("target_sdk") as Integer ?: 26)
+    minimum_sdk = (System.getenv("minimum_sdk") as Integer ?: 14) //Android 4.0+
+    build_tools = (System.getenv("build_tools") ?: "26.0.0")
+    aware_libs = (System.getenv("aware_libs") as String ?: "development-SNAPSHOT")
 }
 
 buildscript {
     repositories {
+        maven {
+            url 'https://maven.google.com'
+        }
+        google()
         jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:3.0.0-beta3'
     }
 }
 
 allprojects {
     repositories {
+        maven {
+            url 'https://maven.google.com'
+        }
+        google()
         jcenter()
+        mavenCentral()
     }
 }

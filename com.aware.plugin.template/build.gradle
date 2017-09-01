@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion compile_sdk
+    buildToolsVersion build_tools
 
     defaultConfig {
         applicationId "com.aware.plugin.template" //EDIT ME
-        minSdkVersion 11
-        targetSdkVersion 25
+        minSdkVersion minimum_sdk
+        targetSdkVersion target_sdk
         versionCode version_code
         versionName version_readable
     }
@@ -48,7 +48,8 @@ configurations.all {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:$support_libs"
-    compile "com.github.denzilferreira:aware-client:$aware_libs"
+    implementation "com.android.support:appcompat-v7:$support_libs"
+    implementation "com.github.denzilferreira:aware-client:$aware_libs"
+    implementation "com.android.support:appcompat-v7:$support_libs"
+    implementation "com.android.support:gridlayout-v7:$support_libs"
 }

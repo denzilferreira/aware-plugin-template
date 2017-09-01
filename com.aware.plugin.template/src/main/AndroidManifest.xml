@@ -19,13 +19,23 @@
             android:name="com.aware.plugin.template.Settings"
             android:exported="true" />
 
-        <!-- Keep the ${applicationId} so there are no conflicts when merging this plugin as a library for reuse -->
+        <!-- Keep the ${applicationId} so there are no conflicts when merging this plugin as a library for reuse. Update the plugin_template string in values -->
         <provider
             android:name="com.aware.plugin.template.Provider"
             android:authorities="${applicationId}.provider.xxx"
             android:exported="true"
+            android:label="@string/plugin_template"
             android:readPermission="com.aware.READ_CONTEXT_DATA"
             android:writePermission="com.aware.WRITE_CONTEXT_DATA" />
+
+        <service
+            android:name="com.aware.plugin.template.syncadapters.Template_Sync"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_template" />
+        </service>
 
     </application>
 </manifest>
