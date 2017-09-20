@@ -16,6 +16,9 @@ public class Plugin extends Aware_Plugin {
     public void onCreate() {
         super.onCreate();
 
+        //This allows plugin data to be synced on demand from broadcast Aware#ACTION_AWARE_SYNC_DATA
+        AUTHORITY = Provider.getAuthority(this);
+
         TAG = "AWARE::"+getResources().getString(R.string.app_name);
 
         /**
