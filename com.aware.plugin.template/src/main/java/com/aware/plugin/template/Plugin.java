@@ -16,6 +16,9 @@ public class Plugin extends Aware_Plugin {
     public void onCreate() {
         super.onCreate();
 
+        //This allows plugin data to be synced on demand from broadcast Aware#ACTION_AWARE_SYNC_DATA
+        AUTHORITY = Provider.getAuthority(this);
+
         TAG = "AWARE::"+getResources().getString(R.string.app_name);
 
         /**
@@ -78,6 +81,7 @@ public class Plugin extends Aware_Plugin {
             //Enable our plugin's sync-adapter to upload the data to the server if part of a study
             if (Aware.getSetting(this, Aware_Preferences.FREQUENCY_WEBSERVICE).length() >= 0 && !Aware.isSyncEnabled(this, Provider.getAuthority(this)) && Aware.isStudy(this) && getApplicationContext().getPackageName().equalsIgnoreCase("com.aware.phone") || getApplicationContext().getResources().getBoolean(R.bool.standalone)) {
                 ContentResolver.setIsSyncable(Aware.getAWAREAccount(this), Provider.getAuthority(this), 1);
+                ContentResolver.setSyncAutomatically(Aware.getAWAREAccount(this), Provider.getAuthority(this), true);
                 ContentResolver.addPeriodicSync(
                         Aware.getAWAREAccount(this),
                         Provider.getAuthority(this),
@@ -99,6 +103,7 @@ public class Plugin extends Aware_Plugin {
 
         //Turn off the sync-adapter if part of a study
         if (Aware.isStudy(this) && (getApplicationContext().getPackageName().equalsIgnoreCase("com.aware.phone") || getApplicationContext().getResources().getBoolean(R.bool.standalone))) {
+            ContentResolver.setSyncAutomatically(Aware.getAWAREAccount(this), Provider.getAuthority(this), false);
             ContentResolver.removePeriodicSync(
                     Aware.getAWAREAccount(this),
                     Provider.getAuthority(this),
