@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.aware.Accelerometer;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
+import com.aware.Screen;
 import com.aware.utils.Aware_Plugin;
 
 public class Plugin extends Aware_Plugin {
@@ -75,6 +76,29 @@ public class Plugin extends Aware_Plugin {
                 @Override
                 public void onAccelerometerChanged(ContentValues contentValues) {
                     sendBroadcast(new Intent("ACCELEROMETER_DATA").putExtra("data", contentValues));
+                }
+            });
+
+            Aware.startScreen(this);
+            Screen.setSensorObserver(new Screen.AWARESensorObserver() {
+                @Override
+                public void onScreenOn() {
+
+                }
+
+                @Override
+                public void onScreenOff() {
+
+                }
+
+                @Override
+                public void onScreenLocked() {
+
+                }
+
+                @Override
+                public void onScreenUnlocked() {
+
                 }
             });
 
